@@ -110,7 +110,7 @@ class Machine<S, E> {
   /// wait in a queue until the processing of the current event and any
   /// corresponding transition is completed.
   ///
-  /// This method returns `true` iff there was a suitable event handler for the
+  /// This method returns `true` if there was a suitable event handler for the
   /// event (which was not guarded or the guard returned true). This method
   /// returns after the transition happened (if any). Asynchronous action
   /// functions are NOT awaited before this function returns.
