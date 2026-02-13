@@ -1,0 +1,8 @@
+{
+  "track_id": "plantuml_bridge_20260212",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-12T17:43:00Z",
+  "updated_at": "2026-02-12T17:43:00Z",
+  "description": "To provide a new library which acts as a visualization bridge for the hierarchical_state_machine (HSM) library by implementing @docs/PlantUML PRD.md"
+}
