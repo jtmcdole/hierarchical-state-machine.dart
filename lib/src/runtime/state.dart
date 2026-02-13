@@ -34,6 +34,7 @@ base class State<S, E> extends BaseState<S, E> {
   /// Used for history restoration.
   State<S, E>? _history;
 
+  /// The most recently active direct child of this state.
   @visibleForTesting
   State<S, E>? get history => _history;
 
@@ -45,23 +46,18 @@ base class State<S, E> extends BaseState<S, E> {
     }
   }
 
-  /// Is this state currently in the active chain of states from root.
+  /// Whether this state is currently in the active chain of states from root.
   ///
   /// Note: the direct children of [ParallelState]s are all considered active if
   /// the parallel state is active.
   @override
   bool isActive = false;
-  // bool get isActive => switch (parent) {
-  //   null => isRoot && hsm.isRunning,
-  //   ParallelState(:var isActive) => isActive,
-  //   State(:var active) => active == this,
-  // };
 
   /// Called when the state is exiting.
-  StateFunction? onExit;
+  final StateFunction? onExit;
 
   /// Called when the state is entering.
-  StateFunction? onEnter;
+  final StateFunction? onEnter;
 
   /// The default state to transition to if we are entered.
   BaseState<S, E>? initialState;
@@ -89,7 +85,7 @@ base class State<S, E> extends BaseState<S, E> {
   ///
   /// Events are handled in the order they are installed. See [EventHandler] for
   /// a deeper explanation of the parameters.
-  List<EventHandler<S, E>> addHandler<D>(
+  List<EventHandler<S, E>> addHandler<D extends Object?>(
     E event, {
     BaseState<S, E>? target,
     GuardFunction<E?, D>? guard,

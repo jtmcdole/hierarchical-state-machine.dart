@@ -53,12 +53,12 @@ void main() {
         root: .composite(
           id: .root,
           initial: .choice,
-          on: {.toRoot: .new(target: .root, kind: .external)},
+          on: {.toRoot: .to(target: .root, kind: .external)},
           children: [
             .choice(
               id: .choice,
-              defaultTransition: .new(target: .targetA),
-              options: [.new(target: .targetB, guard: (e, d) => d == 'B')],
+              defaultTransition: .to(target: .targetA),
+              options: [.to(target: .targetB, guard: (e, d) => d == 'B')],
             ),
             .composite(id: .targetA),
             .composite(id: .targetB),
@@ -83,13 +83,13 @@ void main() {
             .composite(
               id: .s1,
               on: {
-                .forkEvent: .new(target: .fork),
-                .toP: .new(target: .p),
+                .forkEvent: .to(target: .fork),
+                .toP: .to(target: .p),
               },
             ),
             .parallel(
               id: .p,
-              on: {.toS1: .new(target: .s1)},
+              on: {.toS1: .to(target: .s1)},
               children: [
                 .composite(
                   id: .r1,
@@ -97,7 +97,7 @@ void main() {
                   children: [
                     .composite(
                       id: .r11,
-                      on: {.e1: .new(target: .r121)},
+                      on: {.e1: .to(target: .r121)},
                     ),
                     .composite(
                       id: .r12,
@@ -116,7 +116,7 @@ void main() {
                         .composite(id: .r211),
                         .composite(
                           id: .r212,
-                          on: {.e2: .new(target: .r211)},
+                          on: {.e2: .to(target: .r211)},
                         ),
                       ],
                     ),
@@ -127,8 +127,8 @@ void main() {
             .fork(
               id: .fork,
               transitions: [
-                .new(target: .r1, history: .shallow),
-                .new(target: .r21, history: .deep),
+                .to(target: .r1, history: .shallow),
+                .to(target: .r21, history: .deep),
               ],
             ),
           ],
@@ -180,11 +180,11 @@ void main() {
         root: .composite(
           id: .root,
           initial: .s1,
-          on: {Events.e1: .new(action: (e, d) => outerCalled = true)},
+          on: {Events.e1: .to(action: (e, d) => outerCalled = true)},
           children: [
             .composite(
               id: .s1,
-              on: {Events.e1: .new(action: (e, d) => innerCalled = true)},
+              on: {Events.e1: .to(action: (e, d) => innerCalled = true)},
             ),
           ],
         ),

@@ -104,12 +104,12 @@ void main() {
           root: .composite(
             id: 'root',
             on: {
-              't1': .new(
+              't1': .to(
                 action: (e, d) {
                   machine.handle('t2', 'internal');
                 },
               ),
-              't2': .new(
+              't2': .to(
                 action: (e, d) {
                   t2 = true;
                 },
@@ -174,9 +174,7 @@ void main() {
         machineDef = MachineBlueprint(
           root: .composite(
             id: 'root',
-            on: {
-              'error': .new(action: (e, d) => throw Exception('test error')),
-            },
+            on: {'error': .to(action: (e, d) => throw Exception('test error'))},
           ),
         );
         final (compiled, errors) = machineDef.compile(
@@ -211,10 +209,10 @@ void main() {
   });
 
   group('State', () {
-    late Machine<String, dynamic> machine;
+    late Machine<String, Object?> machine;
 
     test('isRoot', () {
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           children: [.composite(id: 'a')],
@@ -230,7 +228,7 @@ void main() {
     });
 
     test('can be nested', () {
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           children: [.composite(id: 'a')],
@@ -245,7 +243,7 @@ void main() {
     });
 
     test('path generation', () {
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           children: [.composite(id: 'a')],
@@ -260,7 +258,7 @@ void main() {
     });
 
     test('report ancestry traits', () {
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           children: [
@@ -286,7 +284,7 @@ void main() {
     });
 
     test('returns LCA of common states', () {
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           children: [
@@ -326,12 +324,12 @@ void main() {
       final data1 = 'data-1';
       final data2 = 3;
 
-      final machineDef = MachineBlueprint<String, dynamic>(
+      final machineDef = MachineBlueprint<String, Object?>(
         root: .composite(
           id: 'root',
           initial: 'a',
           on: {
-            event1: TransitionBlueprint<String, dynamic>(
+            event1: TransitionBlueprint<String, Object?>(
               target: 'a',
               guard: (event, data) => data == data1,
               action: (event, data) => expect(data, isA<String>()),
@@ -341,7 +339,7 @@ void main() {
             .composite(
               id: 'a',
               on: {
-                event2: TransitionBlueprint<String, dynamic>(
+                event2: TransitionBlueprint<String, Object?>(
                   target: 'root',
                   guard: (event, data) => data != data2,
                   action: (event, data) => expect(data, isA<int>()),
@@ -431,7 +429,7 @@ void main() {
                   entry: () => record('aa:enter'),
                   exit: () => record('aa:exit'),
                   on: {
-                    't1': .new(
+                    't1': .to(
                       target: 'ab',
                       action: (e, d) => record('aa:$e'),
                       kind: TransitionKind.external,
@@ -507,7 +505,7 @@ void main() {
         root: .composite(
           id: 'root',
           initial: 'b',
-          on: {'t1': .new(target: 'a')},
+          on: {'t1': .to(target: 'a')},
           children: [
             .composite(id: 'a', entry: () => record('a:enter')),
             .parallel(
@@ -566,7 +564,7 @@ void main() {
                   initial: 'baa',
                   children: [.composite(id: 'baa')],
                   on: {
-                    't1': .new(
+                    't1': .to(
                       guard: (e, d) {
                         records.add('ba:g:$e');
                         return false;
@@ -579,7 +577,7 @@ void main() {
                   initial: 'bba',
                   children: [.composite(id: 'bba')],
                   on: {
-                    't1': .new(
+                    't1': .to(
                       guard: (e, d) {
                         records.add('bb:g:$e');
                         return false;
@@ -623,7 +621,7 @@ void main() {
                     .composite(
                       id: 'aaa',
                       on: {
-                        't1': .new(
+                        't1': .to(
                           target: 'a',
                           action: (e, d) => record('aaa:$e'),
                           kind: TransitionKind.local,
@@ -659,7 +657,7 @@ void main() {
             .composite(
               id: 'a',
               on: {
-                't1': .new(
+                't1': .to(
                   target: 'aaa',
                   action: (e, d) => record('a:$e'),
                   kind: TransitionKind.local,
@@ -702,7 +700,7 @@ void main() {
                 .composite(
                   id: 'aaa',
                   on: {
-                    't1': .new(
+                    't1': .to(
                       target: 'aa',
                       action: (e, d) => record('aaa:$e'),
                       kind: TransitionKind.external,
@@ -736,7 +734,7 @@ void main() {
               entry: () => record('a:enter'),
               exit: () => record('a:exit'),
               on: {
-                't1': .new(
+                't1': .to(
                   target: 'aaa',
                   action: (e, d) => record('a:$e'),
                   kind: TransitionKind.external,

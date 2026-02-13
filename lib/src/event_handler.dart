@@ -24,6 +24,7 @@ enum HandledStatus {
   deferred,
 }
 
+/// Defines whether a transition is local or external.
 enum TransitionKind {
   /// Implies that the Transition exits its source Vertex.
   /// This is the default kind.
@@ -84,29 +85,31 @@ enum TransitionKind {
 /// │└────────────┘                    └───────────────────┘│
 /// └───────────────────────────────────────────────────────┘
 final class EventHandler<S, E> {
+  /// The destination state for this transition.
   final BaseState<S, E>? target;
 
   /// The lowest common ancestor between the source state and the target state.
   /// Pre-calculated during compilation for performance.
   BaseState<S, E>? lca;
 
-  /// Methods use to gate the processing of an [EventTarget] by the associated
-  /// [State] it is registered with.
-  final GuardFunction<E?, dynamic>? guard;
+  /// An optional guard function that must return true for the transition to be taken.
+  final GuardFunction<E?, Object?>? guard;
 
-  /// Methods used by [EventHandler] during a transition, after having exited
-  /// all states to the lowest common ancestor.
-  final ActionFunction<E?, dynamic>? action;
+  /// An optional effect behavior executed when this transition is taken.
+  final ActionFunction<E?, Object?>? action;
 
+  /// Whether the transition is local or external.
   final TransitionKind kind;
 
   /// The type of history restoration to apply when entering the target state.
   final HistoryType history;
 
+  /// Returns true if this handler does not trigger a transition to a new state.
   bool get isInternal => target == null;
 
   String? _lazy;
 
+  /// Creates a new [EventHandler] with the specified configuration.
   EventHandler({
     this.target,
     this.guard,
@@ -125,20 +128,26 @@ final class EventHandler<S, E> {
 
 /// A handler for completion transitions (joins), evaluated when a region completes.
 final class CompletionHandler<S, E> {
+  /// The destination state for this transition.
   final BaseState<S, E>? target;
 
   /// The lowest common ancestor between the source state and the target state.
   /// Pre-calculated during compilation for performance.
   BaseState<S, E>? lca;
 
+  /// An optional guard function that must return true for the transition to be taken.
   final bool Function()? guard;
+
+  /// An optional effect behavior executed when this transition is taken.
   final void Function()? action;
 
+  /// Whether the transition is local or external.
   final TransitionKind kind;
 
   /// The type of history restoration to apply when entering the target state.
   final HistoryType history;
 
+  /// Creates a new [CompletionHandler] with the specified configuration.
   CompletionHandler({
     this.target,
     this.guard,
@@ -148,9 +157,11 @@ final class CompletionHandler<S, E> {
   });
 }
 
-/// Simple method called for [State.onEnter], [State.onExit], and
-/// [State.onInitialState].
+/// Function signature for state entrance/exit behaviors.
 typedef StateFunction = void Function();
 
-typedef GuardFunction<E, D> = bool Function(E event, D data);
-typedef ActionFunction<E, D> = void Function(E event, D data);
+/// Function signature for guard conditions.
+typedef GuardFunction<E, D extends Object?> = bool Function(E event, D data);
+
+/// Function signature for transition effect behaviors.
+typedef ActionFunction<E, D extends Object?> = void Function(E event, D data);

@@ -2,11 +2,19 @@ part of '../machine.dart';
 
 /// The root entry point for a state machine definition.
 class MachineBlueprint<S, E> {
+  /// The optional name of the state machine.
   final String? name;
+
+  /// The root state definition of the machine.
   final BasicBlueprint<S, E> root;
 
+  /// Creates a new [MachineBlueprint] with the specified name and root state.
   MachineBlueprint({this.name, required this.root});
 
+  /// Compiles the blueprint into a runnable [Machine].
+  ///
+  /// Returns a tuple containing the compiled [Machine] (if successful) and a list
+  /// of [ValidationError]s encountered during compilation.
   (Machine<S, E>?, List<ValidationError>) compile({
     void Function()? onTerminated,
     MachineObserver<S, E>? observer,
@@ -179,14 +187,13 @@ class MachineBlueprint<S, E> {
     for (final optionDef in def.options) {
       BaseState<S, E>? target;
 
-      if (optionDef.target != null) {
-        target = statesMap[optionDef.target];
-        if (target == null) {
-          errors.add(
-            MissingStateError(optionDef.target, def.id, 'choice option'),
-          );
-        }
+      target = statesMap[optionDef.target];
+      if (target == null) {
+        errors.add(
+          MissingStateError(optionDef.target, def.id, 'choice option'),
+        );
       }
+
       // TODO: Validation requirement: all choice targets must be valid.
       final handler = EventHandler<S, E>(
         target: target,

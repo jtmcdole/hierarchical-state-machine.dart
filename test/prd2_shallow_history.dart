@@ -15,9 +15,9 @@ void main() {
         id: .root,
         initial: .a111,
         on: {
-          .toB: .new(target: .b),
-          .toAShallow: .new(target: .a, history: .shallow),
-          .toA1Shallow: .new(target: .a1, history: .shallow),
+          .toB: .to(target: .b),
+          .toAShallow: .to(target: .a, history: .shallow),
+          .toA1Shallow: .to(target: .a1, history: .shallow),
         },
         children: [
           .composite(id: .b),

@@ -35,8 +35,10 @@ part 'runtime/observer.dart';
 /// does not bubble up. [State]s can be simple (leaf), composite
 /// (having children), or [ParallelState] (all children active at once).
 final class Machine<S, E> {
+  /// The observer that receives notifications about machine events and transitions.
   final MachineObserver<S, E> observer;
 
+  /// The name of this state machine.
   final String name;
 
   /// Returns whether or not the state machine has been [start]ed.
@@ -151,7 +153,7 @@ final class Machine<S, E> {
   /// functions are NOT awaited before this function returns.
   ///
   /// See [EventHandler] for more detail.
-  Future<bool> handle(E event, [dynamic data]) {
+  Future<bool> handle(E event, [Object? data]) {
     observer.onEventQueued(this, event, data);
 
     if (!isRunning) {
@@ -214,7 +216,7 @@ class _QueuedWork<E> {
   final EventData<E> eventData;
   final Completer<bool> completer = Completer<bool>();
 
-  _QueuedWork(E event, dynamic data) : eventData = EventData<E>(event, data);
+  _QueuedWork(E event, Object? data) : eventData = EventData<E>(event, data);
 
   _QueuedWork.retry(this.eventData);
 
@@ -229,15 +231,22 @@ class _QueuedWork<E> {
 class EventData<E> {
   static int _nextId = 0;
   final int _id;
+
+  /// The event that triggered this data.
   final E event;
-  final dynamic data;
+
+  /// The data associated with the event.
+  final Object? data;
 
   bool _handled = false;
+
+  /// Whether this event has been handled by a state.
   bool get handled => _handled;
   set handled(bool value) {
     if (value) _handled = value;
   }
 
+  /// Creates a new [EventData] with the specified event and data.
   EventData(this.event, this.data) : _id = _nextId++;
 
   @override

@@ -14,7 +14,7 @@ class ForkTransition<S, E> {
   BaseState<S, E>? lca;
 
   /// An optional effect behavior executed when this branch is taken.
-  final ActionFunction<E?, dynamic>? action;
+  final ActionFunction<E?, Object?>? action;
 
   /// The history restoration strategy to use when entering the [target].
   final HistoryType history;
@@ -56,6 +56,7 @@ base class ForkState<S, E> extends BaseState<S, E> {
   @override
   bool get isActive => false;
 
+  /// The parallel state that is the lowest common ancestor of all fork targets.
   @visibleForTesting
   ParallelState<S, E>? get targetsLca => _targetsLca;
   set targetsLca(ParallelState<S, E>? value) => _targetsLca = value;

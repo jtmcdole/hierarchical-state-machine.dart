@@ -17,7 +17,7 @@ void main() {
             .finish(id: .finalS),
             .parallel(
               id: .parallel,
-              completion: [.new(target: .finalS, guard: () => true)],
+              completion: [.to(target: .finalS, guard: () => true)],
               children: [
                 .composite(id: .r1),
                 .composite(id: .r2),

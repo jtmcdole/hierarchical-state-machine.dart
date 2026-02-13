@@ -9,7 +9,7 @@ void main() {
         root: .composite(
           id: 'root',
           initial: 'a',
-          on: {'event1': .new(target: 'b')},
+          on: {'event1': .to(target: 'b')},
           children: [
             .composite(id: 'a', defer: {'event1'}),
             .composite(id: 'b'),
@@ -48,7 +48,7 @@ void main() {
                 .composite(id: 'r1', defer: {'event1'}),
                 .composite(
                   id: 'r2',
-                  on: {'event1': .new(action: (e, d) {})},
+                  on: {'event1': .to(action: (e, d) {})},
                 ),
               ],
             ),
@@ -108,11 +108,11 @@ void main() {
             .composite(
               id: 'a',
               defer: {'event1'},
-              on: {'go_to_b': .new(target: 'b')},
+              on: {'go_to_b': .to(target: 'b')},
             ),
             .composite(
               id: 'b',
-              on: {'event1': .new(action: (e, d) => handleCount++)},
+              on: {'event1': .to(action: (e, d) => handleCount++)},
             ),
           ],
         ),
@@ -145,7 +145,7 @@ void main() {
           children: [
             .parallel(
               id: 'p',
-              on: {'go_to_b': .new(target: 'b')},
+              on: {'go_to_b': .to(target: 'b')},
               children: [
                 .composite(id: 'r1', defer: {'event1'}),
                 .composite(id: 'r2', defer: {'event1'}),
@@ -153,7 +153,7 @@ void main() {
             ),
             .composite(
               id: 'b',
-              on: {'event1': .new(action: (e, d) => handleCount++)},
+              on: {'event1': .to(action: (e, d) => handleCount++)},
             ),
           ],
         ),
@@ -185,7 +185,7 @@ void main() {
           children: [
             .parallel(
               id: 'p',
-              on: {'go_to_b': .new(target: 'b')},
+              on: {'go_to_b': .to(target: 'b')},
               children: [
                 .composite(
                   id: 'r1',
@@ -194,7 +194,7 @@ void main() {
                     .composite(
                       id: 'S1_Defer',
                       defer: {'event1'},
-                      on: {'step_1': .new(target: 'S1_Done')},
+                      on: {'step_1': .to(target: 'S1_Done')},
                     ),
                     .composite(id: 'S1_Done'),
                   ],
@@ -204,7 +204,7 @@ void main() {
             ),
             .composite(
               id: 'b',
-              on: {'event1': .new(action: (e, d) => handleCount++)},
+              on: {'event1': .to(action: (e, d) => handleCount++)},
             ),
           ],
         ),
@@ -249,16 +249,16 @@ void main() {
               .composite(
                 id: 'a',
                 defer: {'e1'},
-                on: {'go_to_b': .new(target: 'b')},
+                on: {'go_to_b': .to(target: 'b')},
               ),
               .composite(
                 id: 'b',
                 defer: {'e1'},
-                on: {'go_to_c': .new(target: 'c')},
+                on: {'go_to_c': .to(target: 'c')},
               ),
               .composite(
                 id: 'c',
-                on: {'e1': .new(action: (e, d) => handleCount++)},
+                on: {'e1': .to(action: (e, d) => handleCount++)},
               ),
             ],
           ),
@@ -297,7 +297,7 @@ void main() {
               id: 'A',
               defer: {'event1'},
               on: {
-                'event1': .new(
+                'event1': .to(
                   guard: (e, d) => (d as int) > 10,
                   action: (e, d) {
                     records.add(d as int);
@@ -309,7 +309,7 @@ void main() {
             .composite(
               id: 'B',
               on: {
-                'event1': .new(
+                'event1': .to(
                   action: (e, d) {
                     records.add(d as int);
                   },

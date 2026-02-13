@@ -19,6 +19,7 @@ abstract base class BaseState<S, E> implements HsmState<S, E> {
   @override
   final List<BaseState<S, E>> path = <BaseState<S, E>>[];
 
+  /// Creates a new [BaseState] with the specified identity and hierarchy.
   BaseState(this.id, this.hsm, {this.parent}) {
     path.addAll(parent?.path ?? []);
     path.add(this);
@@ -78,7 +79,7 @@ abstract base class BaseState<S, E> implements HsmState<S, E> {
     required BaseState<S, E>? lca,
     TransitionKind kind = .local,
     EventData<E>? eventData,
-    ActionFunction<E?, dynamic>? action,
+    ActionFunction<E?, Object?>? action,
     HistoryType history = HistoryType.none,
   }) {
     hsm.observer.onTransition(
@@ -132,6 +133,7 @@ abstract base class BaseState<S, E> implements HsmState<S, E> {
   }
 }
 
+/// Provides a helper method to create [ForkTransition]s.
 extension ForkTargetExtension<S, E> on BaseState<S, E> {
   /// Returns a [ForkTransition] targeting this state.
   ///
@@ -139,7 +141,7 @@ extension ForkTargetExtension<S, E> on BaseState<S, E> {
   /// You can optionally specify an [action] to run when this branch is entered,
   /// and a [history] restoration strategy.
   ForkTransition<S, E> forkTarget({
-    ActionFunction<E?, dynamic>? action,
+    ActionFunction<E?, Object?>? action,
     HistoryType history = HistoryType.none,
   }) => ForkTransition(target: this, action: action, history: history);
 }

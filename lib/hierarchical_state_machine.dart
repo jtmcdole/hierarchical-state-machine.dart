@@ -21,6 +21,8 @@ export 'src/machine.dart'
         // Runtime state
         Machine,
         HsmState,
+        StateType,
+        StateTypeExtension,
         MachineObserver,
         PrintObserver,
         // Runtime functions and data

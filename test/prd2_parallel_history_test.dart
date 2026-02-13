@@ -28,11 +28,11 @@ void main() {
           id: .root,
           initial: .p,
           on: {
-            .toIdle: .new(target: .idle),
-            .toPDeep: .new(target: .p, history: .deep),
-            .toBDeep: .new(target: .b, history: .deep),
-            .toA2Shallow: .new(target: .a2, history: .shallow),
-            .toPB2: .new(target: .b2),
+            .toIdle: .to(target: .idle),
+            .toPDeep: .to(target: .p, history: .deep),
+            .toBDeep: .to(target: .b, history: .deep),
+            .toA2Shallow: .to(target: .a2, history: .shallow),
+            .toPB2: .to(target: .b2),
           },
           children: [
             .parallel(
@@ -42,8 +42,8 @@ void main() {
                   id: .a,
                   initial: .a1,
                   on: {
-                    .toA2: .new(target: .a2),
-                    .toA2_2: .new(target: .a2_2),
+                    .toA2: .to(target: .a2),
+                    .toA2_2: .to(target: .a2_2),
                   },
                   children: [
                     .composite(id: .a1),
@@ -60,7 +60,7 @@ void main() {
                 .composite(
                   id: .b,
                   initial: .b1,
-                  on: {.toB2: .new(target: .b2)},
+                  on: {.toB2: .to(target: .b2)},
                   children: [
                     .composite(id: .b1),
                     .composite(id: .b2),
@@ -179,8 +179,8 @@ void main() {
         root: .composite(
           id: 'root',
           on: {
-            'deep': .new(target: 'p', history: .deep),
-            'shallow': .new(target: 'p', history: .shallow),
+            'deep': .to(target: 'p', history: .deep),
+            'shallow': .to(target: 'p', history: .shallow),
           },
           children: [
             .composite(id: 'a'),
@@ -210,8 +210,8 @@ void main() {
           children: [
             .choice(
               id: 'c',
-              defaultTransition: .new(target: 'p', history: .shallow),
-              options: [.new(target: 'p', history: .shallow)],
+              defaultTransition: .to(target: 'p', history: .shallow),
+              options: [.to(target: 'p', history: .shallow)],
             ),
             .composite(id: 'a'),
             .parallel(
@@ -241,7 +241,7 @@ void main() {
           children: [
             .fork(
               id: 'c',
-              transitions: [.new(target: 'p', history: .shallow)],
+              transitions: [.to(target: 'p', history: .shallow)],
             ),
             .composite(id: 'a'),
             .parallel(
@@ -272,7 +272,7 @@ void main() {
           children: [
             .composite(
               id: 'a',
-              completion: [.new(target: 'p', history: .shallow)],
+              completion: [.to(target: 'p', history: .shallow)],
             ),
             .parallel(
               id: 'p',

@@ -16,7 +16,7 @@ void main() {
           children: [
             .composite(
               id: States.s1,
-              on: {Events.terminate: .new(target: States.t1)},
+              on: {Events.terminate: .to(target: States.t1)},
             ),
             .terminate(id: States.t1),
           ],
@@ -46,7 +46,7 @@ void main() {
               .composite(
                 id: States.s1,
                 exit: () => s1ExitCalled = true,
-                on: {Events.terminate: .new(target: States.t1)},
+                on: {Events.terminate: .to(target: States.t1)},
               ),
               .terminate(id: States.t1),
             ],
@@ -72,7 +72,7 @@ void main() {
             .composite(
               id: States.s1,
               initial: States.s11,
-              on: {Events.terminate: .new(target: States.t1)},
+              on: {Events.terminate: .to(target: States.t1)},
               children: [
                 .composite(
                   id: States.s11,
@@ -133,7 +133,7 @@ void main() {
             children: [
               .composite(
                 id: States.s1,
-                on: {Events.terminate: .new(target: States.t1)},
+                on: {Events.terminate: .to(target: States.t1)},
               ),
               .terminate(id: States.t1),
             ],
