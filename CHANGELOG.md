@@ -1,3 +1,7 @@
+#### 2.1.1
+
+* pub.dev points are annoying
+
 #### 2.1.0
 
 * Optional library to produce plantuml diagrams.
