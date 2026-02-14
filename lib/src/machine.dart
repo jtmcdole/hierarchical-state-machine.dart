@@ -2,8 +2,12 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:meta/meta.dart';
+
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 
 // Event-related classes
 part 'event_handler.dart';
@@ -26,6 +30,8 @@ part 'blueprints/states.dart';
 part 'blueprints/lca.dart';
 
 part 'runtime/observer.dart';
+
+part 'serializer.dart';
 
 /// A hierarchical state machine (HSM) container of [S] states that accepts
 /// [E] events.
