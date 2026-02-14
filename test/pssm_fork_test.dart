@@ -40,7 +40,7 @@ void main() {
           children: [
             .composite(
               id: States.wait,
-              on: {Events.start: .new(target: States.fork)},
+              on: {Events.start: .to(target: States.fork)},
             ),
             .parallel(
               id: States.s1,
@@ -63,8 +63,8 @@ void main() {
             .fork(
               id: States.fork,
               transitions: [
-                .new(target: States.s1_1),
-                .new(target: States.s1_2),
+                .to(target: States.s1_1),
+                .to(target: States.s1_2),
               ],
             ),
           ],
@@ -94,7 +94,7 @@ void main() {
           children: [
             .composite(
               id: States.wait,
-              on: {Events.start: .new(target: States.fork)},
+              on: {Events.start: .to(target: States.fork)},
             ),
             .composite(
               id: States.s1,
@@ -116,8 +116,8 @@ void main() {
                 .fork(
                   id: States.fork,
                   transitions: [
-                    .new(target: States.s1_1_1),
-                    .new(target: States.s1_2_1),
+                    .to(target: States.s1_1_1),
+                    .to(target: States.s1_2_1),
                   ],
                 ),
               ],

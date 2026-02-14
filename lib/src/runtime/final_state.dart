@@ -5,6 +5,7 @@ part of '../machine.dart';
 /// Final states are "silent" and do not process events. Entering a final state
 /// triggers a completion check on the parent state.
 base class FinalState<S, E> extends State<S, E> {
+  /// Creates a new [FinalState] with the specified [id].
   FinalState(super.id, super.hsm, {super.parent});
 
   @override

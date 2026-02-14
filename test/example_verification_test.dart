@@ -4,11 +4,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Example Verification', () {
-    test('complex_blueprint.dart compiles and runs', () async {
-      final result = await Process.run('dart', [
-        'run',
-        'example/complex_blueprint.dart',
-      ]);
+    test('main.dart compiles and runs', () async {
+      final result = await Process.run('dart', ['run', 'example/main.dart']);
 
       if (result.exitCode != 0) {
         print('STDOUT: ${result.stdout}');

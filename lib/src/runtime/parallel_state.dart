@@ -5,6 +5,10 @@ part of '../machine.dart';
 /// States can handle events by registering [EventHandler] via the [addHandler]
 /// and [addHandlers] methods. See EventHandler for more information.
 base class ParallelState<S, E> extends State<S, E> {
+  /// A state in which all direct descendants are active at the same time.
+  ///
+  /// States can handle events by registering [EventHandler] via the [addHandler]
+  /// and [addHandlers] methods. See EventHandler for more information.
   ParallelState(
     super.id,
     super.hsm, {

@@ -25,14 +25,14 @@ void main() {
         root: .composite(
           id: MyState.root,
           on: {
-            MyEvent.toS1: .new(target: MyState.s1),
-            MyEvent.toS11: .new(target: MyState.s11),
-            MyEvent.toS112: .new(target: MyState.s112),
-            MyEvent.toS1HistoryShallow: .new(
+            MyEvent.toS1: .to(target: MyState.s1),
+            MyEvent.toS11: .to(target: MyState.s11),
+            MyEvent.toS112: .to(target: MyState.s112),
+            MyEvent.toS1HistoryShallow: .to(
               target: MyState.s1,
               history: HistoryType.shallow,
             ),
-            MyEvent.toS1HistoryDeep: .new(
+            MyEvent.toS1HistoryDeep: .to(
               target: MyState.s1,
               history: HistoryType.deep,
             ),
@@ -42,8 +42,8 @@ void main() {
               id: MyState.s1,
               initial: MyState.s12,
               on: {
-                MyEvent.e1: .new(target: MyState.s2),
-                MyEvent.e2: .new(target: MyState.s11),
+                MyEvent.e1: .to(target: MyState.s2),
+                MyEvent.e2: .to(target: MyState.s11),
               },
               children: [
                 .composite(

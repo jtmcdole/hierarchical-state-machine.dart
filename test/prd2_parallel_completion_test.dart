@@ -32,7 +32,7 @@ void main() {
           children: [
             .parallel(
               id: States.p,
-              completion: [.new(target: States.next)],
+              completion: [.to(target: States.next)],
               children: [
                 .composite(
                   id: States.r1,
@@ -40,7 +40,7 @@ void main() {
                   children: [
                     .composite(
                       id: States.r1s1,
-                      on: {Events.toF1: .new(target: States.r1f1)},
+                      on: {Events.toF1: .to(target: States.r1f1)},
                     ),
                     .finish(id: States.r1f1),
                   ],
@@ -51,7 +51,7 @@ void main() {
                   children: [
                     .composite(
                       id: States.r2s1,
-                      on: {Events.toF2: .new(target: States.r2f1)},
+                      on: {Events.toF2: .to(target: States.r2f1)},
                     ),
                     .finish(id: States.r2f1),
                   ],
@@ -93,7 +93,7 @@ void main() {
           children: [
             .parallel(
               id: States.p,
-              completion: [.new(target: States.next)],
+              completion: [.to(target: States.next)],
               children: [
                 .composite(
                   id: States.r1,
@@ -101,7 +101,7 @@ void main() {
                   children: [
                     .composite(
                       id: States.r1s1,
-                      on: {Events.toF1: .new(target: States.r1f1)},
+                      on: {Events.toF1: .to(target: States.r1f1)},
                     ),
                     .finish(id: States.r1f1),
                   ],
@@ -115,7 +115,7 @@ void main() {
                       children: [
                         .composite(
                           id: States.r3s1,
-                          on: {Events.toF3: .new(target: States.r3f1)},
+                          on: {Events.toF3: .to(target: States.r3f1)},
                         ),
                         .finish(id: States.r3f1),
                       ],
@@ -126,7 +126,7 @@ void main() {
                       children: [
                         .composite(
                           id: States.r4s1,
-                          on: {Events.toF4: .new(target: States.r4f1)},
+                          on: {Events.toF4: .to(target: States.r4f1)},
                         ),
                         .finish(id: States.r4f1),
                       ],

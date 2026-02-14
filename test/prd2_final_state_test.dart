@@ -16,11 +16,11 @@ void main() {
           root: .composite(
             id: States.root,
             initial: States.s1,
-            completion: [.new(target: States.s2)],
+            completion: [.to(target: States.s2)],
             children: [
               .composite(
                 id: States.s1,
-                on: {Events.stop: .new(target: States.f1)},
+                on: {Events.stop: .to(target: States.f1)},
               ),
               .finish(id: States.f1),
               .composite(id: States.s2),
@@ -46,11 +46,11 @@ void main() {
         root: .composite(
           id: States.root,
           initial: States.s1,
-          completion: [.new(target: States.s2, guard: () => false)],
+          completion: [.to(target: States.s2, guard: () => false)],
           children: [
             .composite(
               id: States.s1,
-              on: {Events.stop: .new(target: States.f1)},
+              on: {Events.stop: .to(target: States.f1)},
             ),
             .finish(id: States.f1),
             .composite(id: States.s2),

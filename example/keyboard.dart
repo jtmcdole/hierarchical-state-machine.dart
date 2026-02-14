@@ -15,15 +15,15 @@ void main() async {
             .composite(
               id: 'main_default',
               on: {
-                'CAPS_LOCK': .new(target: 'caps_locked'),
-                'ANY_KEY': .new(action: (e, d) => output.add(d)),
+                'CAPS_LOCK': .to(target: 'caps_locked'),
+                'ANY_KEY': .to(action: (e, d) => output.add(d)),
               },
             ),
             .composite(
               id: 'caps_locked',
               on: {
-                'CAPS_LOCK': .new(target: 'main_default'),
-                'ANY_KEY': .new(
+                'CAPS_LOCK': .to(target: 'main_default'),
+                'ANY_KEY': .to(
                   action: (e, d) => output.add((d as String).toUpperCase()),
                 ),
               },
@@ -37,15 +37,15 @@ void main() async {
             .composite(
               id: 'numbers',
               on: {
-                'NUM_LOCK': .new(target: 'arrows'),
-                'NUM_KEY': .new(action: (e, d) => output.add(d)),
+                'NUM_LOCK': .to(target: 'arrows'),
+                'NUM_KEY': .to(action: (e, d) => output.add(d)),
               },
             ),
             .composite(
               id: 'arrows',
               on: {
-                'NUM_LOCK': .new(target: 'numbers'),
-                'NUM_KEY': .new(
+                'NUM_LOCK': .to(target: 'numbers'),
+                'NUM_KEY': .to(
                   action: (e, d) {
                     switch (d) {
                       case '8':

@@ -1,3 +1,11 @@
+#### 2.1.0
+
+* Optional library to produce plantuml diagrams.
+* `.to()` constructor for all transition blueprints.
+* All `dynamic` -> `Object?` (should be non-breaking)
+* `StateType` for runtime identification.
+* Documentation updates.
+
 #### 2.0.0
 
 2.0.0: PSSM Update

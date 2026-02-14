@@ -31,8 +31,10 @@ BaseState<S, E>? lowestCommonAncestor<S, E>(
   return common;
 }
 
+/// Provides a helper method to find the LCA of a collection of states.
 extension StateLCAExtension<S, E> on List<BaseState<S, E>> {
   /// Finds the Lowest Common Ancestor for a collection of states.
+  ///
   /// Returns null if the collection is empty.
   BaseState<S, E>? lca() {
     final pathCount = length;

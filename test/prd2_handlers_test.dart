@@ -20,7 +20,7 @@ void main() {
     test('CompositeBlueprint has completion registry', () {
       final blueprint = CompositeBlueprint<MyState, MyEvent>(
         id: MyState.s1,
-        completion: [.new(target: MyState.s1)],
+        completion: [.to(target: MyState.s1)],
       );
       expect(blueprint.completion, isNotEmpty);
       expect(blueprint.completion!.first.target, equals(MyState.s1));

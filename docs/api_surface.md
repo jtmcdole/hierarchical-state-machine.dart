@@ -28,6 +28,7 @@
 ### Constructors
 ```dart
   CompletionBlueprint({S? target, bool Function()? guard, void Function()? action, TransitionKind kind, HistoryType history});
+  CompletionBlueprint.to({S? target, bool Function()? guard, void Function()? action, TransitionKind kind, HistoryType history});
 ```
 ### Fields
 ```dart
@@ -57,6 +58,7 @@
 ### Constructors
 ```dart
   DefaultTransitionBlueprint({required S target, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
+  DefaultTransitionBlueprint.to({required S target, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
 ```
 ### Fields
 ```dart
@@ -92,6 +94,7 @@
 ### Constructors
 ```dart
   ForkTransitionBlueprint({required S target, void Function(E?, Object?)? action, HistoryType history});
+  ForkTransitionBlueprint.to({required S target, void Function(E?, Object?)? action, HistoryType history});
 ```
 ### Fields
 ```dart
@@ -108,6 +111,13 @@
 ```dart
   String details;
   S forkId;
+```
+## Enum: `HistoryType`
+### Values
+`none, shallow, deep`
+### Fields
+```dart
+  List<HistoryType> values;
 ```
 ## Class: `HsmState`
 ### Fields
@@ -148,7 +158,7 @@
 ### Methods
 ```dart
   HsmState<S, E>? getState(S id);
-  Future<bool> handle(E event, [dynamic data]);
+  Future<bool> handle(E event, [Object? data]);
   bool start();
   bool stop();
   String toString();
@@ -174,21 +184,21 @@
 ```
 ### Methods
 ```dart
-  void onEventDeferred(HsmState<S, E> state, E event, dynamic data);
-  void onEventDropped(HsmState<S, E> state, E event, dynamic data);
-  void onEventError(Machine<S, E> machine, E event, dynamic data, Object error, StackTrace stackTrace);
-  void onEventHandled(HsmState<S, E> state, E event, dynamic data);
-  void onEventHandling(Machine<S, E> machine, E event, dynamic data);
-  void onEventQueued(Machine<S, E> machine, E event, dynamic data);
-  void onEventUnhandled(HsmState<S, E> state, E event, dynamic data);
-  void onInternalTransition(HsmState<S, E> state, E? event, dynamic data);
+  void onEventDeferred(HsmState<S, E> state, E event, Object? data);
+  void onEventDropped(HsmState<S, E> state, E event, Object? data);
+  void onEventError(Machine<S, E> machine, E event, Object? data, Object error, StackTrace stackTrace);
+  void onEventHandled(HsmState<S, E> state, E event, Object? data);
+  void onEventHandling(Machine<S, E> machine, E event, Object? data);
+  void onEventQueued(Machine<S, E> machine, E event, Object? data);
+  void onEventUnhandled(HsmState<S, E> state, E event, Object? data);
+  void onInternalTransition(HsmState<S, E> state, E? event, Object? data);
   void onMachineStarted(Machine<S, E> machine);
   void onMachineStarting(Machine<S, E> machine);
   void onMachineStopped(Machine<S, E> machine);
   void onMachineTerminated(Machine<S, E> machine);
   void onStateEnter(HsmState<S, E> state);
   void onStateExit(HsmState<S, E> state);
-  void onTransition(HsmState<S, E> source, HsmState<S, E> target, E? event, dynamic data, TransitionKind kind);
+  void onTransition(HsmState<S, E> source, HsmState<S, E> target, E? event, Object? data, TransitionKind kind);
 ```
 ## Class: `MissingStateError`
 ### Constructors
@@ -217,21 +227,33 @@
 ```
 ### Methods
 ```dart
-  void onEventDeferred(HsmState<S, E> state, E event, dynamic data);
-  void onEventDropped(HsmState<S, E> state, E event, dynamic data);
-  void onEventError(Machine<S, E> machine, E event, dynamic data, Object error, StackTrace stackTrace);
-  void onEventHandled(HsmState<S, E> state, E event, dynamic data);
-  void onEventHandling(Machine<S, E> machine, E event, dynamic data);
-  void onEventQueued(Machine<S, E> machine, E event, dynamic data);
-  void onEventUnhandled(HsmState<S, E> state, E event, dynamic data);
-  void onInternalTransition(HsmState<S, E> state, E? event, dynamic data);
+  void onEventDeferred(HsmState<S, E> state, E event, Object? data);
+  void onEventDropped(HsmState<S, E> state, E event, Object? data);
+  void onEventError(Machine<S, E> machine, E event, Object? data, Object error, StackTrace stackTrace);
+  void onEventHandled(HsmState<S, E> state, E event, Object? data);
+  void onEventHandling(Machine<S, E> machine, E event, Object? data);
+  void onEventQueued(Machine<S, E> machine, E event, Object? data);
+  void onEventUnhandled(HsmState<S, E> state, E event, Object? data);
+  void onInternalTransition(HsmState<S, E> state, E? event, Object? data);
   void onMachineStarted(Machine<S, E> machine);
   void onMachineStarting(Machine<S, E> machine);
   void onMachineStopped(Machine<S, E> machine);
   void onMachineTerminated(Machine<S, E> machine);
   void onStateEnter(HsmState<S, E> state);
   void onStateExit(HsmState<S, E> state);
-  void onTransition(HsmState<S, E> source, HsmState<S, E> target, E? event, dynamic data, TransitionKind kind);
+  void onTransition(HsmState<S, E> source, HsmState<S, E> target, E? event, Object? data, TransitionKind kind);
+```
+## Enum: `StateType`
+### Values
+`composite, parallel, choice, fork, finish, terminate`
+### Fields
+```dart
+  List<StateType> values;
+```
+## Extension: `StateTypeExtension` on `HsmState<dynamic, dynamic>`
+### Fields / Accessors
+```dart
+  StateType get type;
 ```
 ## Class: `TerminateBlueprint`
 ### Constructors
@@ -242,6 +264,7 @@
 ### Constructors
 ```dart
   TransitionBlueprint({S? target, bool Function(E?, Object?)? guard, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
+  TransitionBlueprint.to({S? target, bool Function(E?, Object?)? guard, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
 ```
 ### Fields
 ```dart
@@ -250,6 +273,13 @@
   HistoryType history;
   TransitionKind kind;
   S? target;
+```
+## Enum: `TransitionKind`
+### Values
+`external, local`
+### Fields
+```dart
+  List<TransitionKind> values;
 ```
 ## Class: `UnknownDefinitionTypeError`
 ### Constructors
@@ -273,4 +303,33 @@
 ### Methods
 ```dart
   String toString();
+```
+# PUBLIC API FOR `library package:hierarchical_state_machine/plant_uml.dart`
+## Enum: `ParallelSeparator`
+### Values
+`horizontal, vertical`
+### Fields
+```dart
+  String value;
+  List<ParallelSeparator> values;
+```
+## Class: `PlantUmlEncoder`
+### Constructors
+```dart
+  PlantUmlEncoder({String? direction, List<String> skinparams, ParallelSeparator parallelSeparator});
+```
+### Fields
+```dart
+  String? direction;
+  ParallelSeparator parallelSeparator;
+  List<String> skinparams;
+```
+### Methods
+```dart
+  String encode(MachineBlueprint<S, E> blueprint);
+```
+## Extension: `PlantUmlExtension` on `MachineBlueprint<S, E>`
+### Methods
+```dart
+  String toPlantUml({String? direction, List<String> skinparams, ParallelSeparator parallelSeparator});
 ```

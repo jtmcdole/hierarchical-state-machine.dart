@@ -15,7 +15,7 @@ void main() {
     test('StateDefinition should accept basic properties', () {
       final state = CompositeBlueprint<String, String>(
         id: 's1',
-        on: {'event': .new(target: 'next')},
+        on: {'event': .to(target: 'next')},
       );
       expect(state.id, equals('s1'));
       expect(state.on?['event']?.target, 'next');
@@ -28,7 +28,7 @@ void main() {
       final choice = ChoiceBlueprint<String, String>(
         id: 'c1',
         defaultTransition: defaultTrans,
-        options: [.new(target: 's3', guard: (e, d) => true)],
+        options: [.to(target: 's3', guard: (e, d) => true)],
       );
       expect(choice.id, equals('c1'));
       expect(choice.defaultTransition, equals(defaultTrans));
@@ -39,8 +39,8 @@ void main() {
       final fork = ForkBlueprint<String, String>(
         id: 'f1',
         transitions: [
-          .new(target: 'r1'),
-          .new(target: 'r2'),
+          .to(target: 'r1'),
+          .to(target: 'r2'),
         ],
       );
       expect(fork.id, equals('f1'));
@@ -53,7 +53,7 @@ void main() {
         children: [
           .choice(
             id: 'c1',
-            defaultTransition: .new(target: 's2'),
+            defaultTransition: .to(target: 's2'),
           ),
         ],
       );
@@ -173,7 +173,7 @@ void main() {
             children: [
               CompositeBlueprint<String, String>(
                 id: 's1',
-                on: {'goto_s2': .new(target: 's2')},
+                on: {'goto_s2': .to(target: 's2')},
               ),
               CompositeBlueprint<String, String>(id: 's2'),
             ],
@@ -202,8 +202,8 @@ void main() {
               .composite(id: 's2'),
               .choice(
                 id: 'choice',
-                defaultTransition: .new(target: 's1'),
-                options: [.new(target: 's2', guard: (e, d) => true)],
+                defaultTransition: .to(target: 's1'),
+                options: [.to(target: 's2', guard: (e, d) => true)],
               ),
             ],
           ),
@@ -239,8 +239,8 @@ void main() {
               ForkBlueprint<String, String>(
                 id: 'fork',
                 transitions: [
-                  .new(target: 's1'),
-                  .new(target: 's2'),
+                  .to(target: 's1'),
+                  .to(target: 's2'),
                 ],
               ),
             ],
@@ -276,8 +276,8 @@ void main() {
             .fork(
               id: 'fork',
               transitions: [
-                .new(target: 's1'),
-                .new(target: 's2'),
+                .to(target: 's1'),
+                .to(target: 's2'),
               ],
             ),
           ],
@@ -303,8 +303,8 @@ void main() {
             .composite(id: 's2'),
             ChoiceBlueprint<String, String>(
               id: 'choice',
-              defaultTransition: .new(target: 's1'),
-              options: [.new(target: 's2', guard: (e, d) => true)],
+              defaultTransition: .to(target: 's1'),
+              options: [.to(target: 's2', guard: (e, d) => true)],
             ),
           ],
         ),
@@ -331,7 +331,7 @@ void main() {
             children: [
               ForkBlueprint<String, String>(
                 id: 'fork',
-                transitions: [.new(target: 'missing')],
+                transitions: [.to(target: 'missing')],
               ),
             ],
           ),
@@ -357,7 +357,7 @@ void main() {
       () {
         final root = CompositeBlueprint<String, String>(
           id: 'root',
-          on: {'event': .new(target: 'missing')},
+          on: {'event': .to(target: 'missing')},
         );
         final machineDef = MachineBlueprint<String, String>(root: root);
         final (machine, errors) = machineDef.compile();
@@ -385,8 +385,8 @@ void main() {
             children: [
               .choice(
                 id: 'choice',
-                defaultTransition: .new(target: 'missing_default'),
-                options: [.new(target: 'missing_option')],
+                defaultTransition: .to(target: 'missing_default'),
+                options: [.to(target: 'missing_option')],
               ),
             ],
           ),

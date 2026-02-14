@@ -22,18 +22,18 @@ void main() {
           children: [
             .composite(
               id: MyState.a1,
-              on: {MyEvent.e1: .new(target: MyState.choice)},
+              on: {MyEvent.e1: .to(target: MyState.choice)},
             ),
             .composite(id: MyState.targetB),
             .composite(id: MyState.targetD),
             .choice(
               id: MyState.choice,
-              defaultTransition: .new(
+              defaultTransition: .to(
                 target: MyState.targetD,
                 action: (e, d) => counter++,
               ),
               options: [
-                .new(target: MyState.targetB, guard: (e, d) => (d as int) > 10),
+                .to(target: MyState.targetB, guard: (e, d) => (d as int) > 10),
               ],
             ),
           ],

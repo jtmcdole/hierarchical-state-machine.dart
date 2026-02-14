@@ -1,4 +1,5 @@
 import 'package:hierarchical_state_machine/hierarchical_state_machine.dart';
+import 'package:hierarchical_state_machine/plant_uml.dart';
 
 /// Events used to drive the state transitions in the Game Blueprint.
 enum GameEvent {
@@ -30,18 +31,18 @@ void main() async {
     root: .composite(
       id: 'root',
       initial: 'loading',
-      on: {.exitGame: .new(target: 'exitApp')},
+      on: {.exitGame: .to(target: 'exitApp')},
       children: [
         .composite(
           id: 'loading',
-          on: {.gameLoaded: .new(target: 'checkAuth')},
+          on: {.gameLoaded: .to(target: 'checkAuth')},
         ),
 
         .choice(
           id: 'checkAuth',
-          defaultTransition: .new(target: 'loginScreen'),
+          defaultTransition: .to(target: 'loginScreen'),
           options: [
-            .new(
+            .to(
               target: 'gameplay',
               guard: (e, d) => (d as Map?)?['isLoggedIn'] == true,
             ),
@@ -57,11 +58,11 @@ void main() async {
               children: [
                 .composite(
                   id: 'idle',
-                  on: {.move: .new(target: 'walking')},
+                  on: {.move: .to(target: 'walking')},
                 ),
                 .composite(
                   id: 'walking',
-                  on: {.stop: .new(target: 'idle')},
+                  on: {.stop: .to(target: 'idle')},
                 ),
               ],
             ),
@@ -71,13 +72,13 @@ void main() async {
               children: [
                 .composite(
                   id: 'peaceful',
-                  on: {.attack: .new(target: 'fighting')},
+                  on: {.attack: .to(target: 'fighting')},
                 ),
                 .composite(
                   id: 'fighting',
                   on: {
-                    .flee: .new(target: 'peaceful'),
-                    .stop: .new(target: 'idle'),
+                    .flee: .to(target: 'peaceful'),
+                    .stop: .to(target: 'idle'),
                   },
                 ),
               ],
@@ -90,7 +91,7 @@ void main() async {
           initial: 'audio',
           on: {
             // Transition triggers shallow history restoration upon re-entry
-            .closeSettings: .new(
+            .closeSettings: .to(
               target: 'mainMenu',
               kind: .external,
               history: .shallow,
@@ -104,8 +105,8 @@ void main() async {
             .fork(
               id: 'resumeGame',
               transitions: [
-                .new(target: 'walking', history: .deep),
-                .new(target: 'fighting', history: .deep),
+                .to(target: 'walking', history: .deep),
+                .to(target: 'fighting', history: .deep),
               ],
             ),
           ],
@@ -113,7 +114,7 @@ void main() async {
 
         .composite(
           id: 'loginScreen',
-          on: {.gameLoaded: .new(target: 'gameplay')},
+          on: {.gameLoaded: .to(target: 'gameplay')},
         ),
         .composite(id: 'mainMenu'),
         .terminate(id: 'exitApp'),
@@ -163,4 +164,7 @@ void main() async {
   print('Alt-F4');
   await machine.handle(.exitGame);
   print('Active states: ${machine.stateString}');
+
+  print('--- UML');
+  print(gameBlueprint.toPlantUml());
 }

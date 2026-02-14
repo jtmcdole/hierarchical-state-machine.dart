@@ -34,7 +34,7 @@ void main() {
             children: [
               .composite(
                 id: States.s1,
-                on: {Events.fork: .new(target: States.fork)},
+                on: {Events.fork: .to(target: States.fork)},
               ),
               .parallel(
                 id: States.s2,
@@ -60,8 +60,8 @@ void main() {
               .fork(
                 id: States.fork,
                 transitions: [
-                  .new(target: States.s212),
-                  .new(target: States.s222),
+                  .to(target: States.s212),
+                  .to(target: States.s222),
                 ],
               ),
             ],
@@ -103,13 +103,13 @@ void main() {
           children: [
             .composite(
               id: States.s1,
-              on: {Events.fork: .new(target: States.fork)},
+              on: {Events.fork: .to(target: States.fork)},
               children: [
                 .fork(
                   id: States.fork,
                   transitions: [
-                    .new(target: States.s212),
-                    .new(target: States.s222),
+                    .to(target: States.s212),
+                    .to(target: States.s222),
                   ],
                 ),
               ],
@@ -175,7 +175,7 @@ void main() {
               ),
               .fork(
                 id: States.invalidFork,
-                transitions: [.new(target: States.s21)],
+                transitions: [.to(target: States.s21)],
               ),
             ],
           ),
@@ -221,9 +221,9 @@ void main() {
               .fork(
                 id: States.invalidFork,
                 transitions: [
-                  .new(target: States.s211),
-                  .new(target: States.s212),
-                  .new(target: States.s221),
+                  .to(target: States.s211),
+                  .to(target: States.s212),
+                  .to(target: States.s221),
                 ],
               ),
             ],
@@ -256,8 +256,8 @@ void main() {
             .fork(
               id: States.invalidFork,
               transitions: [
-                .new(target: States.s1),
-                .new(target: States.s2),
+                .to(target: States.s1),
+                .to(target: States.s2),
               ],
             ),
           ],
@@ -287,7 +287,7 @@ void main() {
           children: [
             .composite(
               id: States.s1,
-              on: {Events.fork: .new(target: States.fork)},
+              on: {Events.fork: .to(target: States.fork)},
             ),
             .parallel(
               id: States.s2,
@@ -311,8 +311,8 @@ void main() {
                     .fork(
                       id: States.fork2,
                       transitions: [
-                        .new(target: States.s31),
-                        .new(target: States.s32),
+                        .to(target: States.s31),
+                        .to(target: States.s32),
                       ],
                     ),
                   ],
@@ -322,8 +322,8 @@ void main() {
             .fork(
               id: States.fork,
               transitions: [
-                .new(target: States.s211),
-                .new(target: States.fork2),
+                .to(target: States.s211),
+                .to(target: States.fork2),
               ],
             ),
           ],

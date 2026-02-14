@@ -20,5 +20,6 @@
 
 ## Documentation and Examples
 - **API Documentation:** DartDoc for automated HTML documentation.
+- **Visual Diagrams:** Built-in PlantUML bridge for generating statechart diagrams.
 - **Examples:** Dedicated `example/` directory for code samples.
 - **Conceptual Guides:** Markdown-based documentation in the `docs/` folder.

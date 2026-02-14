@@ -6,6 +6,9 @@ part of '../machine.dart';
 /// property becomes false, and the [Machine.onTerminated] callback is invoked.
 /// All history and deferred events are cleared across the machine.
 base class TerminateState<S, E> extends BaseState<S, E> {
+  /// A terminal node that immediately halts the state machine.
+  ///
+  /// Creates a new [TerminateState] with the specified [id].
   TerminateState(super.id, super.hsm, {super.parent});
 
   /// Terminate states are instantaneous and never "active" in a resting sense.

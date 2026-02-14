@@ -9,6 +9,7 @@ A framework for building state machines similar to UML state charts. States are 
 - **System Engineers:** Building embedded or server-side state-driven applications requiring high reliability.
 
 ## Key Features
+- **Visual Diagram Generation:** Built-in support for generating PlantUML statecharts from machine definitions, facilitating documentation and debugging.
 - **Hierarchical State Organization:** Nested states allow common event handling to be performed by more generic, containing states, reducing redundancy.
 - **Orthogonal Regions:** Support for parallel states enables managing concurrent, independent behaviors within a single machine.
 - **Transitions with Guards and Actions:** Robust event handling including guard conditions to control transitions and side-effect actions.
@@ -22,5 +23,4 @@ A framework for building state machines similar to UML state charts. States are 
 
 ## Vision and Evolution
 - **Extended Semantics:** Implement first-class support for History, Deep History, and Join pseudo-states.
-- **Visual Tooling:** Develop compatibility with visual statechart diagrams or generate diagrams from code.
 - **Asynchronous Excellence:** Provide first-class support for Dart's `Future` and `Stream` within handlers, while also facilitating event-based async result injection.

@@ -15,6 +15,8 @@ part of '../machine.dart';
 /// > no event or data.
 final class ChoiceState<S, E> extends BaseState<S, E> {
   EventHandler<S, E>? _defaultChoice;
+
+  /// The transition to take if none of the [choiceOptions] guards evaluate to true.
   EventHandler<S, E> get defaultChoice => _defaultChoice!;
   set defaultChoice(EventHandler<S, E> value) => _defaultChoice = value;
 
@@ -27,11 +29,12 @@ final class ChoiceState<S, E> extends BaseState<S, E> {
   @override
   bool get isActive => false;
 
+  /// Creates a new [ChoiceState] with the specified configuration.
   ChoiceState(
     super.id,
     super.hsm, {
     BaseState<S, E>? defaultTarget,
-    ActionFunction<E?, dynamic>? action,
+    ActionFunction<E?, Object?>? action,
     TransitionKind kind = TransitionKind.local,
     HistoryType history = HistoryType.none,
     super.parent,
@@ -47,7 +50,7 @@ final class ChoiceState<S, E> extends BaseState<S, E> {
     }
   }
 
-  // Adds a non-default completion handler to this choice state.
+  /// Adds a non-default completion handler to this choice state.
   void addCompletionHandler(EventHandler<S, E> handler) {
     choiceOptions.add(handler);
   }
