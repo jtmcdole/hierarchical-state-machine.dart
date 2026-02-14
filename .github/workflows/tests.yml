@@ -35,14 +35,14 @@ jobs:
         run: dart pub get
 
       - name: Generate Current API
-        run: dart run tool/list_api.dart lib/hierarchical_state_machine.dart current_api.md
+        run: dart run tool/list_api.dart current_api.md
 
       - name: Compare with Source of Truth
         id: compare
         run: |
           if ! diff -u docs/api_surface.md current_api.md > api_diff.diff; then
             echo "::error::API Surface has changed. Please update docs/api_surface.md"
-            echo "::error::API dart run tool/list_api.dart lib/hierarchical_state_machine.dart current_api.md"
+            echo "::error::API dart run tool/list_api.dart current_api.md"
             cat api_diff.diff
             exit 1 # This will fail the job
           fi
