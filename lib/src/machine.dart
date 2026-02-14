@@ -38,6 +38,9 @@ final class Machine<S, E> {
   /// The observer that receives notifications about machine events and transitions.
   final MachineObserver<S, E> observer;
 
+  /// Counter to keep ID's unique in all deferral and work queues.
+  int _nextEventDataId = 0;
+
   /// The name of this state machine.
   final String name;
 
@@ -159,7 +162,8 @@ final class Machine<S, E> {
     if (!isRunning) {
       return Future.value(false);
     }
-    var work = (_eventQueue..add(_QueuedWork(event, data))).last;
+    var work =
+        (_eventQueue..add(_QueuedWork(event, data, _nextEventDataId++))).last;
     if (_handlingEvent) {
       return work.completer.future;
     }
@@ -216,7 +220,8 @@ class _QueuedWork<E> {
   final EventData<E> eventData;
   final Completer<bool> completer = Completer<bool>();
 
-  _QueuedWork(E event, Object? data) : eventData = EventData<E>(event, data);
+  _QueuedWork(E event, Object? data, int id)
+    : eventData = EventData<E>(event, data, id);
 
   _QueuedWork.retry(this.eventData);
 
@@ -229,8 +234,8 @@ class _QueuedWork<E> {
 /// If an event is deferred - this object is held on to and potentially later
 /// replayed. A copy should never be made of this.
 class EventData<E> {
-  static int _nextId = 0;
-  final int _id;
+  /// Unique ID for this object, tracked at the [Machine] level.
+  final int id;
 
   /// The event that triggered this data.
   final E event;
@@ -247,9 +252,9 @@ class EventData<E> {
   }
 
   /// Creates a new [EventData] with the specified event and data.
-  EventData(this.event, this.data) : _id = _nextId++;
+  EventData(this.event, this.data, this.id);
 
   @override
   String toString() =>
-      '[$_id]{event: $event, data: $data${handled ? ', handled' : ''}}';
+      '[$id]{event: $event, data: $data${handled ? ', handled' : ''}}';
 }
