@@ -80,7 +80,7 @@ The encoder should accept a configuration object to control:
 ```dart
 .composite(
   id: States.locked,
-  on: { Events.coin: .new(guard: (e, d) => d == 0.25, target: States.unlocked) },
+  on: { Events.coin: .to(guard: (e, d) => d == 0.25, target: States.unlocked) },
 )
 ```
 

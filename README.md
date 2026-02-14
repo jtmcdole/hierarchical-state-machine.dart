@@ -36,11 +36,11 @@ final blueprint = MachineBlueprint<States, Events>(
     children: [
       .composite(
         id: .locked,
-        on: { .coin: .new(guard: (e, d) => d == 0.25, target: .unlocked) },
+        on: { .coin: .to(guard: (e, d) => d == 0.25, target: .unlocked) },
       ),
       .composite(
         id: .unlocked,
-        on: { .push: .new(target: .locked) },
+        on: { .push: .to(target: .locked) },
       ),
     ],
   ),
