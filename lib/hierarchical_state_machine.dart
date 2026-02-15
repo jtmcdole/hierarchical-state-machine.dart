@@ -53,3 +53,5 @@ export 'src/machine.dart'
         ForkValidationError,
         InvalidRootError,
         UnknownDefinitionTypeError;
+
+export 'src/machine.dart' show Serializer, FingerprintException;
