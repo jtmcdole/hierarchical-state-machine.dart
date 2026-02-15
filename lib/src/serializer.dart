@@ -123,7 +123,7 @@ class Serializer<S, E extends Object> {
     return output.events.first.toString();
   }
 
-  /// Hydrates [source] into the non-running [hsm].
+  /// Hydrates [source] into the non-running [hsm] and sets it running.
   ///
   /// Validates the definitions haven't changed for the machine or throws a
   /// [FingerprintException]. This could be harmless in the case you have added
