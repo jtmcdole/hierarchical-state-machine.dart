@@ -81,6 +81,20 @@
 ```dart
   FinalBlueprint({required S id});
 ```
+## Class: `FingerprintException`
+### Constructors
+```dart
+  FingerprintException(String stored, String calculated);
+```
+### Fields
+```dart
+  String calculated;
+  String stored;
+```
+### Methods
+```dart
+  String toString();
+```
 ## Class: `ForkBlueprint`
 ### Constructors
 ```dart
@@ -242,6 +256,16 @@
   void onStateEnter(HsmState<S, E> state);
   void onStateExit(HsmState<S, E> state);
   void onTransition(HsmState<S, E> source, HsmState<S, E> target, E? event, Object? data, TransitionKind kind);
+```
+## Class: `Serializer`
+### Constructors
+```dart
+  Serializer();
+```
+### Methods
+```dart
+  Future<void> decode(Machine<S, E> hsm, String source, {bool ignoreFingerPrint, required S Function(Object) stateFactory, required E Function(Object) eventFactory, required Object? Function(Object) dataFactory});
+  Future<String> encode(Machine<S, E> hsm);
 ```
 ## Enum: `StateType`
 ### Values
