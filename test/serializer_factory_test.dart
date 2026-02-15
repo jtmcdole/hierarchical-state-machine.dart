@@ -130,9 +130,12 @@ void main() {
         },
       );
 
-      // Verify m2 state
-      expect(m2.isRunning, isFalse);
+      print('JSON: $json');
+
+      // Hydrated and running.
+      expect(m2.isRunning, isTrue);
       m2.start();
+      await m2.settled;
 
       expect(m2.stateString, contains('s1'));
       handledEvents.clear();
@@ -175,6 +178,7 @@ void main() {
       );
 
       m2.start();
+      await m2.settled;
       // Verify it doesn't crash and handled null
     });
   });

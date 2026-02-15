@@ -92,9 +92,6 @@ base class ForkState<S, E> extends BaseState<S, E> {
     if (exitLca is State<S, E>) {
       exitLca.active?._exit(p.path);
     }
-    // else if (exitLca == null) {
-    //   (hsm.root as State<S, E>?)?.active?._exit(p.path);
-    // }
 
     // 2. Enter path to P (excluding P).
     final nextPath = p.path;

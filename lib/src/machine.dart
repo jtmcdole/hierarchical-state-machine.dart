@@ -83,10 +83,7 @@ final class Machine<S, E> {
     if (isRunning) return false;
     observer.onMachineStarting(this);
     _running = true;
-    // 🐔 & 🥚: isActive will prevent initial onEnter() call.
-    // observer.onStateEnter(_root);
     final rootState = root as State<S, E>;
-    // rootState.onEnter?.call();
     rootState._enter([rootState], 0);
     observer.onMachineStarted(this);
     return true;

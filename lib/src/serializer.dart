@@ -191,7 +191,7 @@ class Serializer<S, E extends Object> {
         final state = hsm._states[id];
         if (state == null) {
           // This should never happy if the fingerprints matched...
-          MissingStateError(id, id, 'unable to hydrate missing state');
+          throw MissingStateError(id, id, 'unable to hydrate missing state');
         }
 
         if (state case State<S, E> composite) {
@@ -218,6 +218,32 @@ class Serializer<S, E extends Object> {
         }
       }
     }
+
+    _awaken(hsm);
+  }
+
+  void _awaken(Machine<S, E> hsm) {
+    // We're starting the machine through a special path - calling "enter()"
+    // would just corrupt the tree and trigger transitions.
+    hsm._running = true;
+
+    // Identify all active states and sort them by depth
+    final activeStates = [
+      for (final state in hsm._states.values)
+        if (state.isActive && state is State<S, E>) state,
+    ]..sort((a, b) => a.path.length.compareTo(b.path.length));
+
+    // Trigger onEnter side-effects in top-down order
+    // This handles both simple composite paths and parallel regions naturally
+    for (final state in activeStates) {
+      // call the observer.
+      hsm.observer.onStateEnter(state);
+      // call developer to handle any state initialization/
+      state.onEnter?.call();
+    }
+
+    // we're not started.
+    hsm.observer.onMachineStarted(hsm);
   }
 }
 
