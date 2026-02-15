@@ -77,6 +77,11 @@ Automatically remember where you were.
 
 Capture events that cannot be handled in the current state and automatically replay them once the machine transitions to a state that can.
 
+### Serialization
+
+Are running machine can be serialized to JSON when it is settled (not transitioning, not handling events).
+Developers need to provide a way to serialize data (by adding `.toJson()` to objects) and deserialize by passing in decoder factories.
+
 ## Documentation
 
 For a deep dive into transition segments, guard evaluations, and action execution order, see the [API Documentation](https://pub.dev/documentation/hierarchical_state_machine/latest/).
@@ -101,7 +106,3 @@ When an event is "handled" by a state; the order of operations is defined by PSS
 /// │└────────────┘                    └───────────────────┘│
 /// └───────────────────────────────────────────────────────┘
 ```
-
-## Future Work
-
-- **Serialization**: we plan to save the state of the machine and restore it at a later time.
