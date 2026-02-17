@@ -1,5 +1,9 @@
 # Hierarchial State Machine
 
+## 2.2.1
+
+* reduce dependency version for flutter stable
+
 ## 2.2.0
 
 * serialization and deserialization of machines
