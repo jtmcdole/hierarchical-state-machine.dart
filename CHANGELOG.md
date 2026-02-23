@@ -1,5 +1,9 @@
 # Hierarchial State Machine
 
+## 2.2.2
+
+* fix: allow duplicate events with guards in blueprint.
+
 ## 2.2.1
 
 * reduce dependency version for flutter stable

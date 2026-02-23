@@ -29,8 +29,6 @@ final class TransitionBlueprint<S, E> {
   });
 
   /// Defines a transition to a target state.
-  ///
-  /// Shorthand for defining a fork transition.
   TransitionBlueprint.to({
     S? target,
     GuardFunction<E?, Object?>? guard,
@@ -44,6 +42,15 @@ final class TransitionBlueprint<S, E> {
          kind: kind,
          history: history,
        );
+
+  /// Defines multiple transitions to a target state.
+  factory TransitionBlueprint.any(List<TransitionBlueprint<S, E>> targets) =
+      _MultiTransitionBlueprint;
+}
+
+final class _MultiTransitionBlueprint<S, E> extends TransitionBlueprint<S, E> {
+  final List<TransitionBlueprint<S, E>> transitions;
+  _MultiTransitionBlueprint(this.transitions);
 }
 
 /// Specialized transition for choice states (no guard).
