@@ -351,64 +351,27 @@ class MachineBlueprint<S, E> {
     // Map handlers
     for (final MapEntry(key: event, value: transDef)
         in (def.on ?? {}).entries) {
-      final target = transDef.target != null
-          ? statesMap[transDef.target]
-          : null;
-      if (transDef.target != null && target == null) {
-        errors.add(
-          MissingStateError(transDef.target, def.id, 'event handler "$event"'),
-        );
-      }
-
-      BaseState<S, E>? lca;
-
-      if (target != null) {
-        // LCA has a technical meaning; however what we're storing is either
-        // the LCA or the lowest state in a lineage if its local. This is for
-        // caching reasons.
-        final TransitionKind kind =
-            transDef.kind == .local && target.hasLineage(state)
-            ? .local
-            : .external;
-        // Local means we don't concern ourselves with lca; we do not want
-        // to exit/enter the main source or exit/enter the main target.
-        if (kind == .local) {
-          if (state.isAncestorOf(target)) {
-            // transition is down the tree
-            lca = state;
-          } else {
-            // state is a descendant of target - upwards local transition
-            lca = target;
+      switch (transDef) {
+        case _MultiTransitionBlueprint<S, E> multi:
+          for (final subDef in multi.transitions) {
+            _resolveTransitionDefinition(
+              subDef,
+              statesMap,
+              errors,
+              def,
+              event,
+              state,
+            );
           }
-        } else {
-          // no lineage.
-          lca = lowestCommonAncestor(state, target);
-        }
-      }
-      final handlers = state.addHandler(
-        event,
-        target: target,
-        guard: transDef.guard,
-        action: transDef.action,
-        kind: transDef.kind,
-        history: transDef.history,
-      );
-
-      // LCA has a technical meaning; however we're storing either the LCA or
-      // the lowest state in a lineage if its local. This is for
-      // caching reasons.
-      handlers.last.lca = lca;
-
-      if (target != null) {
-        if (target is ParallelState && transDef.history == .shallow) {
-          errors.add(
-            TransitionError(
-              state.id,
-              target.id,
-              'cannot target parallel state with shallow history',
-            ),
+        default:
+          _resolveTransitionDefinition(
+            transDef,
+            statesMap,
+            errors,
+            def,
+            event,
+            state,
           );
-        }
       }
     }
 
@@ -443,6 +406,73 @@ class MachineBlueprint<S, E> {
     // Recurse
     for (final childDef in def.children) {
       _resolveHierarchy(childDef, hsm, statesMap, errors);
+    }
+  }
+
+  void _resolveTransitionDefinition(
+    TransitionBlueprint<S, E> transDef,
+    Map<S, BaseState<S, E>> statesMap,
+    List<ValidationError> errors,
+    CompositeBlueprint<S, E> def,
+    event,
+    State<S, E> state,
+  ) {
+    final target = transDef.target != null ? statesMap[transDef.target] : null;
+    if (transDef.target != null && target == null) {
+      errors.add(
+        MissingStateError(transDef.target, def.id, 'event handler "$event"'),
+      );
+    }
+
+    BaseState<S, E>? lca;
+
+    if (target != null) {
+      // LCA has a technical meaning; however what we're storing is either
+      // the LCA or the lowest state in a lineage if its local. This is for
+      // caching reasons.
+      final TransitionKind kind =
+          transDef.kind == .local && target.hasLineage(state)
+          ? .local
+          : .external;
+      // Local means we don't concern ourselves with lca; we do not want
+      // to exit/enter the main source or exit/enter the main target.
+      if (kind == .local) {
+        if (state.isAncestorOf(target)) {
+          // transition is down the tree
+          lca = state;
+        } else {
+          // state is a descendant of target - upwards local transition
+          lca = target;
+        }
+      } else {
+        // no lineage.
+        lca = lowestCommonAncestor(state, target);
+      }
+    }
+    final handlers = state.addHandler(
+      event,
+      target: target,
+      guard: transDef.guard,
+      action: transDef.action,
+      kind: transDef.kind,
+      history: transDef.history,
+    );
+
+    // LCA has a technical meaning; however we're storing either the LCA or
+    // the lowest state in a lineage if its local. This is for
+    // caching reasons.
+    handlers.last.lca = lca;
+
+    if (target != null) {
+      if (target is ParallelState && transDef.history == .shallow) {
+        errors.add(
+          TransitionError(
+            state.id,
+            target.id,
+            'cannot target parallel state with shallow history',
+          ),
+        );
+      }
     }
   }
 }
