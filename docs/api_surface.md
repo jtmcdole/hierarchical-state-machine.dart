@@ -287,6 +287,7 @@
 ## Class: `TransitionBlueprint`
 ### Constructors
 ```dart
+  factory TransitionBlueprint.any(List<TransitionBlueprint<S, E>> targets);
   TransitionBlueprint({S? target, bool Function(E?, Object?)? guard, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
   TransitionBlueprint.to({S? target, bool Function(E?, Object?)? guard, void Function(E?, Object?)? action, TransitionKind kind, HistoryType history});
 ```
