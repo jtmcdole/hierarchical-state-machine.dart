@@ -76,6 +76,117 @@ abstract class BasicBlueprint<S, E> {
   factory BasicBlueprint.terminate({required S id}) = TerminateBlueprint;
 }
 
+/// Provides convenient type-checking and casting for [BasicBlueprint].
+///
+/// These helpers simplify working with blueprints in a polymorphic context,
+/// such as when iterating over children or modifying a deep blueprint tree.
+extension BasicBlueprintHelpers<S, E> on BasicBlueprint<S, E> {
+  /// Returns `true` if this blueprint is a [CompositeBlueprint].
+  bool get isComposite => this is CompositeBlueprint<S, E>;
+
+  /// Casts this blueprint to a [CompositeBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [CompositeBlueprint].
+  CompositeBlueprint<S, E> get asComposite => this as CompositeBlueprint<S, E>;
+
+  /// Returns `true` if this blueprint is a [ParallelBlueprint].
+  bool get isParallel => this is ParallelBlueprint<S, E>;
+
+  /// Casts this blueprint to a [ParallelBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [ParallelBlueprint].
+  ParallelBlueprint<S, E> get asParallel => this as ParallelBlueprint<S, E>;
+
+  /// Returns `true` if this blueprint is a [ChoiceBlueprint].
+  bool get isChoice => this is ChoiceBlueprint<S, E>;
+
+  /// Casts this blueprint to a [ChoiceBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [ChoiceBlueprint].
+  ChoiceBlueprint<S, E> get asChoice => this as ChoiceBlueprint<S, E>;
+
+  /// Returns `true` if this blueprint is a [ForkBlueprint].
+  bool get isFork => this is ForkBlueprint<S, E>;
+
+  /// Casts this blueprint to a [ForkBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [ForkBlueprint].
+  ForkBlueprint<S, E> get asFork => this as ForkBlueprint<S, E>;
+
+  /// Returns `true` if this blueprint is a [FinalBlueprint].
+  bool get isFinal => this is FinalBlueprint<S, E>;
+
+  /// Casts this blueprint to a [FinalBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [FinalBlueprint].
+  FinalBlueprint<S, E> get asFinal => this as FinalBlueprint<S, E>;
+
+  /// Returns `true` if this blueprint is a [TerminateBlueprint].
+  bool get isTerminate => this is TerminateBlueprint<S, E>;
+
+  /// Casts this blueprint to a [TerminateBlueprint].
+  ///
+  /// Throws a [TypeError] if this blueprint is not a [TerminateBlueprint].
+  TerminateBlueprint<S, E> get asTerminate => this as TerminateBlueprint<S, E>;
+
+  /// Recursively searches for a state with the given [id] in this blueprint tree.
+  BasicBlueprint<S, E>? findState(S id) {
+    if (this.id == id) return this;
+    final current = this;
+    if (current is CompositeBlueprint<S, E>) {
+      for (final child in current.children) {
+        final found = child.findState(id);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  /// Returns a new blueprint tree where the state with [id] is replaced by the
+  /// result of calling [transform] on it.
+  ///
+  /// This performs a deep search. If the state is found and transformed, all
+  /// ancestors are rebuilt using their `copyWith` methods to maintain immutability.
+  ///
+  /// Example:
+  /// ```dart
+  /// root.replaceState('deploy', (found) => found.asComposite.copyWith(
+  ///   on: (to: { 'APPROVE': .to(target: 'approval') })
+  /// ));
+  /// ```
+  BasicBlueprint<S, E> replaceState(
+    S id,
+    BasicBlueprint<S, E> Function(BasicBlueprint<S, E> found) transform,
+  ) {
+    if (this.id == id) {
+      return transform(this);
+    }
+
+    final current = this;
+    if (current is CompositeBlueprint<S, E>) {
+      final children = current.children;
+      for (var i = 0; i < children.length; i++) {
+        final child = children[i];
+        final updated = child.replaceState(id, transform);
+        if (!identical(updated, child)) {
+          final newChildren = List<BasicBlueprint<S, E>>.from(children);
+          newChildren[i] = updated;
+          return switch (current) {
+            ParallelBlueprint<S, E> parallel => parallel.copyWith(
+              children: newChildren,
+            ),
+            CompositeBlueprint<S, E> composite => composite.copyWith(
+              children: newChildren,
+            ),
+          };
+        }
+      }
+    }
+
+    return this;
+  }
+}
+
 /// A compound state that may contain children.
 ///
 /// Composite states have one region - that is, at most one child may be active
@@ -215,4 +326,90 @@ class FinalBlueprint<S, E> extends BasicBlueprint<S, E> {
 class TerminateBlueprint<S, E> extends BasicBlueprint<S, E> {
   /// Creates a new [TerminateBlueprint] with the specified [id].
   TerminateBlueprint({required super.id});
+}
+
+/// Extension to provide [copyWith] for [CompositeBlueprint].
+extension CompositeBlueprintX<S, E> on CompositeBlueprint<S, E> {
+  /// Creates a copy of this [CompositeBlueprint] with the specified fields
+  /// replaced.
+  CompositeBlueprint<S, E> copyWith({
+    S? id,
+    Set<E>? defer,
+    List<BasicBlueprint<S, E>>? children,
+    ({S? to})? initial,
+    ({Map<E, TransitionBlueprint<S, E>>? to})? on,
+    ({List<CompletionBlueprint<S, E>>? to})? completion,
+    ({StateFunction? to})? entry,
+    ({StateFunction? to})? exit,
+    ({StateFunction? to})? initialAction,
+  }) {
+    return CompositeBlueprint(
+      id: id ?? this.id,
+      on: on != null ? on.to : this.on,
+      defer: defer ?? this.defer,
+      completion: completion != null ? completion.to : this.completion,
+      entry: entry != null ? entry.to : this.entry,
+      exit: exit != null ? exit.to : this.exit,
+      children: children ?? this.children,
+      initial: initial != null ? initial.to : this.initial,
+      initialAction: initialAction != null
+          ? initialAction.to
+          : this.initialAction,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [ParallelBlueprint].
+extension ParallelBlueprintX<S, E> on ParallelBlueprint<S, E> {
+  /// Creates a copy of this [ParallelBlueprint] with the specified fields
+  /// replaced.
+  ParallelBlueprint<S, E> copyWith({
+    S? id,
+    List<BasicBlueprint<S, E>>? children,
+    ({Map<E, TransitionBlueprint<S, E>>? to})? on,
+    ({List<CompletionBlueprint<S, E>>? to})? completion,
+    ({StateFunction? to})? entry,
+    ({StateFunction? to})? exit,
+  }) {
+    return ParallelBlueprint(
+      id: id ?? this.id,
+      children: children ?? this.children,
+      on: on != null ? on.to : this.on,
+      completion: completion != null ? completion.to : this.completion,
+      entry: entry != null ? entry.to : this.entry,
+      exit: exit != null ? exit.to : this.exit,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [ChoiceBlueprint].
+extension ChoiceBlueprintX<S, E> on ChoiceBlueprint<S, E> {
+  /// Creates a copy of this [ChoiceBlueprint] with the specified fields
+  /// replaced.
+  ChoiceBlueprint<S, E> copyWith({
+    S? id,
+    DefaultTransitionBlueprint<S, E>? defaultTransition,
+    List<TransitionBlueprint<S, E>>? options,
+  }) {
+    return ChoiceBlueprint(
+      id: id ?? this.id,
+      defaultTransition: defaultTransition ?? this.defaultTransition,
+      options: options ?? this.options,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [ForkBlueprint].
+extension ForkBlueprintX<S, E> on ForkBlueprint<S, E> {
+  /// Creates a copy of this [ForkBlueprint] with the specified fields
+  /// replaced.
+  ForkBlueprint<S, E> copyWith({
+    S? id,
+    List<ForkTransitionBlueprint<S, E>>? transitions,
+  }) {
+    return ForkBlueprint(
+      id: id ?? this.id,
+      transitions: transitions ?? this.transitions,
+    );
+  }
 }

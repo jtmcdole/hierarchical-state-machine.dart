@@ -476,3 +476,37 @@ class MachineBlueprint<S, E> {
     }
   }
 }
+
+/// Extension to provide [copyWith] for [MachineBlueprint].
+extension MachineBlueprintX<S, E> on MachineBlueprint<S, E> {
+  /// Creates a copy of this [MachineBlueprint] with the specified fields
+  /// replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  MachineBlueprint<S, E> copyWith({
+    ({String? to})? name,
+    BasicBlueprint<S, E>? root,
+  }) {
+    return MachineBlueprint(
+      name: name != null ? name.to : this.name,
+      root: root ?? this.root,
+    );
+  }
+
+  /// Recursively searches for a state with the given [id] in this blueprint tree.
+  BasicBlueprint<S, E>? findState(S id) => root.findState(id);
+
+  /// Recursively searches for a state with the given [id] and replaces it
+  /// using the [transform] function.
+  ///
+  /// Returns a new [MachineBlueprint] with the updated state tree.
+  MachineBlueprint<S, E> replaceState(
+    S id,
+    BasicBlueprint<S, E> Function(BasicBlueprint<S, E> found) transform,
+  ) {
+    final updatedRoot = root.replaceState(id, transform);
+    if (identical(updatedRoot, root)) return this;
+    return copyWith(root: updatedRoot);
+  }
+}
