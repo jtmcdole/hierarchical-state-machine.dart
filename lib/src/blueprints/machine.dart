@@ -493,4 +493,20 @@ extension MachineBlueprintX<S, E> on MachineBlueprint<S, E> {
       root: root ?? this.root,
     );
   }
+
+  /// Recursively searches for a state with the given [id] in this blueprint tree.
+  BasicBlueprint<S, E>? findState(S id) => root.findState(id);
+
+  /// Recursively searches for a state with the given [id] and replaces it
+  /// using the [transform] function.
+  ///
+  /// Returns a new [MachineBlueprint] with the updated state tree.
+  MachineBlueprint<S, E> replaceState(
+    S id,
+    BasicBlueprint<S, E> Function(BasicBlueprint<S, E> found) transform,
+  ) {
+    final updatedRoot = root.replaceState(id, transform);
+    if (identical(updatedRoot, root)) return this;
+    return copyWith(root: updatedRoot);
+  }
 }

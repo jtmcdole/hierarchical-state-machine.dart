@@ -44,36 +44,39 @@ void main() async {
   final (staging, _) = stagingCiCd.compile();
   await runCiCd(staging!);
 
-  final rootBlueprint = stagingCiCd.root.asComposite;
-  final prodCiCd = stagingCiCd.copyWith(
-    name: (to: 'prod cicd'),
-    root: rootBlueprint.copyWith(
-      children: [
-        for (final state in rootBlueprint.children)
-          switch (state.id) {
-            .deploy => state.asComposite.copyWith(
-              on: (to: {.next: .to(target: .approval)}),
+  final root = stagingCiCd.findState(.root)!.asComposite;
+  final prodCiCd = stagingCiCd
+      .copyWith(
+        name: (to: 'prod cicd'),
+        // Add the new children
+        root: root.copyWith(
+          children: [
+            ...root.children,
+            .composite(
+              id: State.approval,
+              entry: () => print('approval'),
+              on: {.next: .to(target: State.promote)},
             ),
-            _ => state,
-          },
-        .composite(
-          id: .approval,
-          entry: () => print('approval'),
-          on: {.next: .to(target: .promote)},
-        ),
-        .composite(
-          id: .promote,
-          entry: () => print('promote to prod'),
-          on: {
-            .next: .to(
-              target: .terminate,
-              action: (_, _) => print('terminate'),
+            .composite(
+              id: State.promote,
+              entry: () => print('promote to prod'),
+              on: {
+                .next: .to(
+                  target: State.terminate,
+                  action: (_, _) => print('terminate'),
+                ),
+              },
             ),
-          },
+          ],
         ),
-      ],
-    ),
-  );
+      )
+      // Re-link the existing deploy state to the new approval state.
+      .replaceState(
+        State.deploy,
+        (found) => found.asComposite.copyWith(
+          on: (to: {.next: .to(target: State.approval)}),
+        ),
+      );
 
   final (prod, _) = prodCiCd.compile();
   await runCiCd(prod!);

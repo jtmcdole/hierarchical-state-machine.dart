@@ -128,6 +128,63 @@ extension BasicBlueprintHelpers<S, E> on BasicBlueprint<S, E> {
   ///
   /// Throws a [TypeError] if this blueprint is not a [TerminateBlueprint].
   TerminateBlueprint<S, E> get asTerminate => this as TerminateBlueprint<S, E>;
+
+  /// Recursively searches for a state with the given [id] in this blueprint tree.
+  BasicBlueprint<S, E>? findState(S id) {
+    if (this.id == id) return this;
+    final current = this;
+    if (current is CompositeBlueprint<S, E>) {
+      for (final child in current.children) {
+        final found = child.findState(id);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  /// Returns a new blueprint tree where the state with [id] is replaced by the
+  /// result of calling [transform] on it.
+  ///
+  /// This performs a deep search. If the state is found and transformed, all
+  /// ancestors are rebuilt using their `copyWith` methods to maintain immutability.
+  ///
+  /// Example:
+  /// ```dart
+  /// root.replaceState('deploy', (found) => found.asComposite.copyWith(
+  ///   on: (to: { 'APPROVE': .to(target: 'approval') })
+  /// ));
+  /// ```
+  BasicBlueprint<S, E> replaceState(
+    S id,
+    BasicBlueprint<S, E> Function(BasicBlueprint<S, E> found) transform,
+  ) {
+    if (this.id == id) {
+      return transform(this);
+    }
+
+    final current = this;
+    if (current is CompositeBlueprint<S, E>) {
+      final children = current.children;
+      for (var i = 0; i < children.length; i++) {
+        final child = children[i];
+        final updated = child.replaceState(id, transform);
+        if (!identical(updated, child)) {
+          final newChildren = List<BasicBlueprint<S, E>>.from(children);
+          newChildren[i] = updated;
+          return switch (current) {
+            ParallelBlueprint<S, E> parallel => parallel.copyWith(
+              children: newChildren,
+            ),
+            CompositeBlueprint<S, E> composite => composite.copyWith(
+              children: newChildren,
+            ),
+          };
+        }
+      }
+    }
+
+    return this;
+  }
 }
 
 /// A compound state that may contain children.
