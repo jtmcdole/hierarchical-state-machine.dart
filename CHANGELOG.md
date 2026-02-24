@@ -1,5 +1,10 @@
 # Hierarchial State Machine
 
+## 2.3.0
+
+* feat: copyWith() extensions to blueprints
+* feat: find / replace extensions for machine & state blueprints.
+
 ## 2.2.2
 
 * fix: allow duplicate events with guards in blueprint.
