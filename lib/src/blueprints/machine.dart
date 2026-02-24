@@ -476,3 +476,21 @@ class MachineBlueprint<S, E> {
     }
   }
 }
+
+/// Extension to provide [copyWith] for [MachineBlueprint].
+extension MachineBlueprintX<S, E> on MachineBlueprint<S, E> {
+  /// Creates a copy of this [MachineBlueprint] with the specified fields
+  /// replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  MachineBlueprint<S, E> copyWith({
+    ({String? to})? name,
+    BasicBlueprint<S, E>? root,
+  }) {
+    return MachineBlueprint(
+      name: name != null ? name.to : this.name,
+      root: root ?? this.root,
+    );
+  }
+}

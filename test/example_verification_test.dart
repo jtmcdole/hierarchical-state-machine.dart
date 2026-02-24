@@ -57,5 +57,39 @@ void main() {
         ]),
       );
     });
+
+    test('copy_with.dart compiles and runs', () async {
+      final result = await Process.run('dart', [
+        'run',
+        'example/copy_with.dart',
+      ], stdoutEncoding: utf8);
+
+      if (result.exitCode != 0) {
+        print('STDOUT: ${result.stdout}');
+        print('STDERR: ${result.stderr}');
+      }
+
+      expect(result.exitCode, 0, reason: 'Example should run successfully');
+
+      expect(
+        LineSplitter.split(result.stdout),
+        containsAllInOrder([
+          '--- starting staging cicd ---',
+          'checkout',
+          'build',
+          'test',
+          'deploy to staging',
+          'terminate',
+          '--- starting prod cicd ---',
+          'checkout',
+          'build',
+          'test',
+          'deploy to staging',
+          'approval',
+          'promote to prod',
+          'terminate',
+        ]),
+      );
+    });
   });
 }

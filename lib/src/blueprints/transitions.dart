@@ -174,3 +174,94 @@ final class CompletionBlueprint<S, E> {
          history: history,
        );
 }
+
+/// Extension to provide [copyWith] for [TransitionBlueprint].
+extension TransitionBlueprintX<S, E> on TransitionBlueprint<S, E> {
+  /// Creates a copy of this [TransitionBlueprint] with the specified fields
+  /// replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  TransitionBlueprint<S, E> copyWith({
+    ({S? to})? target,
+    ({GuardFunction<E?, Object?>? to})? guard,
+    ({ActionFunction<E?, Object?>? to})? action,
+    TransitionKind? kind,
+    HistoryType? history,
+  }) {
+    return TransitionBlueprint(
+      target: target != null ? target.to : this.target,
+      guard: guard != null ? guard.to : this.guard,
+      action: action != null ? action.to : this.action,
+      kind: kind ?? this.kind,
+      history: history ?? this.history,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [DefaultTransitionBlueprint].
+extension DefaultTransitionBlueprintX<S, E>
+    on DefaultTransitionBlueprint<S, E> {
+  /// Creates a copy of this [DefaultTransitionBlueprint] with the specified
+  /// fields replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  DefaultTransitionBlueprint<S, E> copyWith({
+    S? target,
+    ({ActionFunction<E?, Object?>? to})? action,
+    TransitionKind? kind,
+    HistoryType? history,
+  }) {
+    return DefaultTransitionBlueprint(
+      target: target ?? this.target,
+      action: action != null ? action.to : this.action,
+      kind: kind ?? this.kind,
+      history: history ?? this.history,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [ForkTransitionBlueprint].
+extension ForkTransitionBlueprintX<S, E> on ForkTransitionBlueprint<S, E> {
+  /// Creates a copy of this [ForkTransitionBlueprint] with the specified
+  /// fields replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  ForkTransitionBlueprint<S, E> copyWith({
+    S? target,
+    ({ActionFunction<E?, Object?>? to})? action,
+    HistoryType? history,
+  }) {
+    return ForkTransitionBlueprint(
+      target: target ?? this.target,
+      action: action != null ? action.to : this.action,
+      history: history ?? this.history,
+    );
+  }
+}
+
+/// Extension to provide [copyWith] for [CompletionBlueprint].
+extension CompletionBlueprintX<S, E> on CompletionBlueprint<S, E> {
+  /// Creates a copy of this [CompletionBlueprint] with the specified fields
+  /// replaced.
+  ///
+  /// Nullable fields use a Record with a named `to` field to allow setting
+  /// the field to `null`.
+  CompletionBlueprint<S, E> copyWith({
+    ({S? to})? target,
+    ({bool Function()? to})? guard,
+    ({void Function()? to})? action,
+    TransitionKind? kind,
+    HistoryType? history,
+  }) {
+    return CompletionBlueprint(
+      target: target != null ? target.to : this.target,
+      guard: guard != null ? guard.to : this.guard,
+      action: action != null ? action.to : this.action,
+      kind: kind ?? this.kind,
+      history: history ?? this.history,
+    );
+  }
+}
