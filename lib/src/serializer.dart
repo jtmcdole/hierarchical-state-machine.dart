@@ -1,7 +1,7 @@
 part of 'machine.dart';
 
 /// Serialize a hierarchial state machine for storage.
-class Serializer<S, E extends Object> {
+class Serializer<S, E> {
   /// Serializes [hsm] to a string for offline storage.
   ///
   /// This call waits for the machine to be settled.

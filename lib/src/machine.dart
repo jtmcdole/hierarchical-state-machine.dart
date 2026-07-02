@@ -138,6 +138,9 @@ final class Machine<S, E> {
   Future<void> get settled =>
       _eventQueue.isEmpty ? Future.value() : onSettled.first;
 
+  /// Returns a serializer for this machine.
+  Serializer<S, E> get serializer => Serializer<S, E>();
+
   /// Prepends work to the front of the event queue.
   ///
   /// Used for replaying deferred events when a state is exited.
