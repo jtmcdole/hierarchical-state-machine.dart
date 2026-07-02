@@ -217,6 +217,7 @@
   Stream<Machine<S, E>> onSettled;
   void Function()? onTerminated;
   HsmState<S, E> root;
+  Serializer<S, E> serializer;
   Future<void> settled;
   String stateString;
 ```

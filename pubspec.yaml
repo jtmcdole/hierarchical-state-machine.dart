@@ -17,7 +17,7 @@ description: >-
   A performant state machine framework inspired by UML.
   Hierarchical parent/child states enable shared event
   handling for cleaner, more efficient logic.
-version: 2.3.0
+version: 2.4.0
 homepage: https://github.com/jtmcdole/hierarchical-state-machine.dart
 
 environment:
@@ -36,3 +36,6 @@ dev_dependencies:
   melos: ^8.0.0
   path: ^1.9.1
   test: ^1.31.1
+
+melos:
+  useRootAsPackage: true

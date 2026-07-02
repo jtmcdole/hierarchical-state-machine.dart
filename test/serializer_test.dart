@@ -70,4 +70,41 @@ void main() {
     expect(m2.stateString, contains('r1_b'));
     expect(m2.stateString, contains('r2_a'));
   });
+
+  test('Machine exposes serializer that can encode/decode', () async {
+    final blueprint = MachineBlueprint<String, String>(
+      name: 'ExposeSerializerTest',
+      root: .composite(
+        id: 'root',
+        initial: 'a',
+        children: [
+          .composite(
+            id: 'a',
+            on: {'go_b': .to(target: 'b')},
+          ),
+          .composite(id: 'b'),
+        ],
+      ),
+    );
+
+    final (m1, _) = blueprint.compile();
+    m1!.start();
+    await m1.handle('go_b');
+
+    // Access serializer directly from machine
+    final serializer = m1.serializer;
+    final json = await serializer.encode(m1);
+
+    final (m2, _) = blueprint.compile();
+    await m2!.serializer.decode(
+      m2,
+      json,
+      stateFactory: (id) => id as String,
+      eventFactory: (e) => e as String,
+      dataFactory: (d) => d,
+    );
+
+    expect(m2.isRunning, isTrue);
+    expect(m2.stateString, contains('b'));
+  });
 }
