@@ -1,3 +1,42 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 2026-07-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`hierarchical_state_machine` - `v2.4.0`](#hierarchical_state_machine---v240)
+
+---
+
+#### `hierarchical_state_machine` - `v2.4.0`
+
+ - **FIX**: allow duplicate events with guards in blueprint (#15).
+ - **FIX**: flutter's pinning of meta... (#12).
+ - **FEAT**(machine): provide Serializer<S,E> from machine.
+ - **FEAT**: add copyWith() functionality to blueprints (#16).
+ - **FEAT**: serialization and deserialization of machines (#11).
+ - **FEAT**: Export blueprints for rendering with PlantUML (#9).
+
+## 2.4.0
+
+ - **FIX**: allow duplicate events with guards in blueprint (#15).
+ - **FIX**: flutter's pinning of meta... (#12).
+ - **FEAT**(machine): provide Serializer<S,E> from machine.
+ - **FEAT**: add copyWith() functionality to blueprints (#16).
+ - **FEAT**: serialization and deserialization of machines (#11).
+ - **FEAT**: Export blueprints for rendering with PlantUML (#9).
+
 # Hierarchial State Machine
 
 ## 2.3.0
